@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Login</title>
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css')}}">
+</head>
+<body>
+<div>
+    <div id="container-login">
+         <h1>LOGIN </h1>
+        {% set mensagens = get_flashed_messages() %}
+        {% if mensagens %}
+            <div id="alerta">
+                {{mensagens[0]}}
+            </div>
+        {% endif %}
+        <form action="login" method="post">
+            <section id="login">
+                <label for="nome">Type your name </label>
+                <input type="text" name="nome" id="nome" placeholder="Name" required>
+                <label for="senha">Type your passarword</label>
+                <input type="password" name="senha" id="senha" placeholder="Password" required>
+                <button type="submit" value="entrar" id="btn-entrar">log in</button>
+            </section>
+        </form>
+    </div>
+</div>
+</body>
+</html>
