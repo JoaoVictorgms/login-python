@@ -1,11 +1,32 @@
 [
-{
-  "nome": "joao",
-  "senha": "123",
-  "nomeCompleto": "João Victor Gomes de Oliveira Alves"
-},
-  {
-    "nome": "pedro",
-    "senha": "456"
-  }
+    {
+        "nome": "Luiz",
+        "senha": "pbkdf2:sha256:260000$sfr3P732RnMHmxTE$67b610a3f58638442926d211848d2fba0bd8e492d9976ab5e2cd6bf53f6f5a9c",
+        "nomeCompleto": "Luiz Paulo"
+    },
+    {
+        "nome": "Joao ",
+        "senha": "pbkdf2:sha256:260000$LBooYD9HEmQwVChR$6861cf19851158124c7a2312c51208d299e08c5e56dc0b5e4be6cb8cf52d2f37",
+        "nomeCompleto": "Joao Victor Gomes de Oliveira Alves"
+    },
+    {
+        "nome": "pedro",
+        "senha": "pbkdf2:sha256:260000$chTByfMHDJi88Bj7$181c59064854f1b291483b694c057b40a2676ce028838c3bc8e23660acd68797",
+        "nomeCompleto": "Pedro Henrique"
+    },
+    {
+        "nome": "Lara",
+        "senha": "pbkdf2:sha256:260000$hXQoYtYwlzBcakix$9033fd1a2efdfcabb5ae4350d3f88e0e0eff2eaad853ffb8e24f6a96b559d1ed",
+        "nomeCompleto": "Lara Lira Gomes"
+    },
+    {
+        "nome": "Victor",
+        "senha": "pbkdf2:sha256:260000$CwXX1VfwuZdERqSZ$a5c03942319501d84d857df20a23bfb90be9ef584c1c0d5abfa031361545d419",
+        "nomeCompleto": "Victor Alves"
+    },
+    {
+        "nome": "Paulo",
+        "senha": "pbkdf2:sha256:260000$kRjpY1jsmo0PIjnS$a376d8031d51cb84ee57c6e551b7ce319331789e76198b7a2acaf712cb0e90b5",
+        "nomeCompleto": "Paulo Gomes"
+    }
 ]

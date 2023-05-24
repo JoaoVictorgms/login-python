@@ -6,12 +6,12 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Login</title>
-      <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css')}}">
 </head>
 <body>
 <div>
     <div id="container-login">
-         <h1>LOGIN </h1>
+         <h1>LOGIN</h1>
         {% set mensagens = get_flashed_messages() %}
         {% if mensagens %}
             <div id="alerta">
@@ -22,10 +22,13 @@
             <section id="login">
                 <label for="nome">Type your name </label>
                 <input type="text" name="nome" id="nome" placeholder="Name" required>
-                <label for="senha">Type your passarword</label>
+                <label for="senha">Type your password</label>
                 <input type="password" name="senha" id="senha" placeholder="Password" required>
-                <button type="submit" value="entrar" id="btn-entrar">log in</button>
+                <button type="submit" value="entrar" id="btn-entrar">Log in</button>
             </section>
+        </form>
+        <form action="cadastrar" method="get">
+            <button type="submit" id="btn-cadastrar">Create Account</button>
         </form>
     </div>
 </div>
