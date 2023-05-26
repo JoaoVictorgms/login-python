@@ -28,5 +28,10 @@
         "nome": "Paulo",
         "senha": "pbkdf2:sha256:260000$kRjpY1jsmo0PIjnS$a376d8031d51cb84ee57c6e551b7ce319331789e76198b7a2acaf712cb0e90b5",
         "nomeCompleto": "Paulo Gomes"
+    },
+    {
+        "nome": "Celia",
+        "senha": "pbkdf2:sha256:260000$48v8iqK9OCFsfuuW$6cfa44129809251fdd9e24dc1f7714583670221abe0a7bb9ce7f33a402ec1c02",
+        "nomeCompleto": "Celia Gomes"
     }
 ]

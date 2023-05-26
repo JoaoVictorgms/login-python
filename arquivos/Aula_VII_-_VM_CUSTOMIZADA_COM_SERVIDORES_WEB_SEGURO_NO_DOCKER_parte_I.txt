@@ -1,0 +1,74 @@
+﻿Instituto Federal de Educação, Ciência e Tecnologia da Paraíba   
+Campus de Cajazeiras 
+Curso Superior de Tecnologia em Análise e Desenvolvimento de Sistemas 
+Disciplina: Segurança de Dados 5º Período 
+Professor: Daladier Júnior Período: 2023.1 
+Importando uma VM a ser usada em toda a prática https 
+Antes de começarmos a instalarmos e configuramos os servidores web seguros – apache2 e nginx – é obrigatório ter instalado o VirtualBox (no Linux ou Windows) e fazer o download do arquivo OVA da VM Ubuntu22server (disponível no link: https://drive.google.com/file/d/1vewrn73W_8nbYpnddtZ06aRkF024SrnI/view?usp=share_link). 
+Após o download importe o arquivo da VM para o VirtualBox clicando duas vezes sobre o arquivo. Ao iniciar a VM suas credenciais são usuário: ads senha: 654123. Vale ressaltar que o Ubuntu 22- 04 instalado é a versão server, que vem sem interface gráfica e com as aplicações servidoras e outros softwares padrões, para tornar este tipo de instalação mais enxuta, rápida e segura. A seguir iremos instalar um contêiner de virtualização – Docker - que abrigará os servidores web. 
+Instalando o contêiner Docker 
+Para instalar um contêiner Docker primeiramente transforme-se em super-usuário com o comando sudo su, em seguida digite o comando docker search ubuntu, observe a opção com mais estrelas, que é a primeira das opções. Agora, faça o download do contêiner docker escolhido e digite o comando: docker pull ubuntu. Em seguida, execute o contêiner docker baixado com o comando docker run –it ubuntu /bin/bash, após este comando o contêiner docker receberá um id aleatório, que deverá ser usado para iniciar e usar o contêiner. Logo, para saber qual o id do contêiner docker digite o comando docker ps –a. Finalmente, digite o comando docker start id e, em seguida, docker attach id. 
+Configurando o servidor Apache2 dentro do contêiner docker 
+1) Vá até o diretório /etc/apache2/sites-available com o comando cd /etc/apache2/sites-available 2) Copie o arquivo modelo de um site com SSL chamado default-ssl.conf para o seu site digitando: cp default-ssl.conf www.ads.br.conf 
+3) Agora, edite o arquivo www.ads.br.conf com o comando pico www.ads.br.conf 4) Edite as seguintes linhas 
+<VirtualHost *:443> 
+ServerName www.ads.br 
+DocumentRoot /var/www/html/ads 
+SSLEngine on 
+ SSLCertificateFile /var/www/html/ads/www.ads.pem 
+ SSLCertificateKeyFile /var/www/html/ads/www.ads.key 
+NOTE: As seguintes linhas com os parâmetros SSLCertificate(Key)File já preenchidos devem estar comentadas como abaixo. 
+#SSLCertificateFile /etc/ssl/certs/ssl-cert-snakeoil.pem 
+ #SSLCertificateKeyFile /etc/ssl/private/ssl-cert-snakeoil.key 
+5) Save the file with CTRL+X+y+ENTER 
+6) Neste momento, na VM principal/ou no seu host (computador principal), no terminal digite o comando pico /etc/hosts, adicione a linha abaixo e salve o arquivo com CTRL+X+y+ENTER www.ads.br 172.17.0.2 
+7) Ative o módulo SSL do apache com o comando a2enmod ssl 
+8) Vá até o diretório /var/www com o comando cd /var/www/html 
+9) Crie um diretório ads com o comando mkdir ads 
+10) Acesso o diretório com o comando cd ads
+11) Crie o certificado digital do servidor HTTPS com o comando: 
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout www.ads.key -out www.ads.pem 12) Crie uma senha para o certificado (Senha: 654123), que será exigida toda vez que o servidor web for inicializado. 
+13) Crie a home do servidor web seguro com o comando pico index.php 
+14) Digite as linhas abaixo: 
+<?php 
+echo '<hr><center>Site demonstrativo do servidor APACHE2 <b> disciplina de Segurança de Dados</b></center><hr>'; 
+echo '<p>'; 
+phpinfo(); 
+?> 
+15) Salve o arquivo teclando CTRL+X+y+ENTER 
+16) Retorne ao diretório /etc/apache2/sites-available com o comando cd /etc/apache2/sites available 
+17) Ative o domínio virtual criado com o comando 
+a2ensite www.ads.br.conf 
+18) Reinicie o servidor web seguro apache2 com o comando service apache2 restart 19) No seu host, para isso você deve ter feito o passo #6, abra qualquer navegador e digite na barra de endereços a URL: https://www.ads.br 
+20) Observe as informações do certificado digital. 
+Configurando o servidor nginx dentro do contêiner Docker 
+Para a configuração do servidor web segguro nginx web siga os passos adiante: 1) Instale o nginx digitando o comando: 
+apt install nginx php-fpm -y 
+2) Acesse o diretório /etc/nginx/sites-available digitando o comando: 
+cd /etc/nginx/sites-enabled 
+3) Copie o arquivo de configuração padrão (default) para o arquivo de seu domínio virtual com o comando: 
+cp default www.ads.br 
+4) Now, it is time to edit the virtual domain file. So, type pico www.ads.br 
+5) Na edição do arquivo busque a string server_name teclando CTRL+W+server_n+ENTER 6) Depois de encontrar a linha da string server_name descomente esta linha retirando o # no início da linha e edite a linha tal como abaixo: 
+server_name www.ads.br; 
+7) Busque a string server { teclando CTRL+W+server {+ENTER e comente as seguintes linhas # listen 80 default_server; 
+# listen [::]:80 default_server; 
+8) Na parte da configuração #SSL no mesmo arquivo descomente as linhas abaixo e delete a palavra default_server 
+listen 443 ssl; 
+listen [::]:443 ssl; 
+9) No mesmo arquivo de configuração do domínio virtual adicione as linhas relativas aos arquivos referentes aos certificados ssl, como pode ser visto abaixo: 
+ssl_certificate /var/www/html/www.ads.pem; 
+ssl_certificate_key /var/www/html/www.ads.key;
+OBS: Você deve obrigatoriamente seguir os nomes destes arquivos da chave pública ( www.ads.pem) e da chave privada (www.ads.key), que devem estar armazenados obrigagtoriamente no diretório /var/www/html/. Caso não estejam o servidor web não inicializa. 
+10) Adicione o arquivo index.php teclando CTRL+W+.php e as linhas referentes aos arquivos de índices, tal como abaixo: 
+index index.php index.html index.htm index.nginx-debian.html; 
+11) Salve o arquivo editado teclando CTRL+X+s+ENTER 
+13) Teste as configurações do servidor nginx digitando o comando nginx -t 
+14) Vá até o diretório /var/www/html/ads com o comando cd /var/www/html/ads e copie os arquivos (home page e certificados) do diretório anterior (/var/www/html/) digitando o comando: cp index.php www.ads.* ../ 
+17) Pare o servidor apache2 e inicie o servidor nginx digitando o comando 
+service apache2 stop; service nginx start 
+18) Abra qualquer navegador e digite na barra de endereços a URL: https://www.ads.br 19) Observe as informações do certificado digital. 
+OBS: Caso em outra VM você não consiga acessar os servidores web do contẽiner Docker é que provavelmente o firewall está bloqueando este acesso. Para sanar este problema do firewall no contẽiner docker na VM principal transforme-se em superusuário com o comando sudo su, vá até o diretório /etc/docker com o comando cd /etc/docker e, em seguide, digite o comando pico daemon.json, depois acrescente as linhas abaixo e salve com o arquivo teclando CTRL+X+y+ENTER. 
+{ 
+“iptables”: false 
+}

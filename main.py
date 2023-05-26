@@ -2,11 +2,14 @@ import os
 from flask import Flask, render_template, request, flash, redirect, send_file
 from werkzeug.security import  check_password_hash
 from werkzeug.utils import secure_filename
-from PyPDF2 import PdfWriter
 import pyexcel as pe
 import json
 import subprocess
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+from werkzeug.security import generate_password_hash
 
+# Resto do seu código...
 
 
 UPLOAD_FOLDER = 'arquivos'
@@ -108,24 +111,56 @@ def audio():
 def imagem():
     return render_template("html/imagem.html")
 
+@app.route("/cadastrar", methods=['GET', 'POST'])
+def cadastrar():
+    if request.method == 'POST':
+        usuario = request.form.get('nome')
+        senha = request.form.get('senha')
+        nome_completo = request.form.get('nome_completo')
 
+        # Codifica a senha
+        senha_codificada = generate_password_hash(senha)
+
+        # Lê o arquivo JSON existente
+        with open('usuarios.json') as usuarios_file:
+            usuarios = json.load(usuarios_file)
+
+        # Adiciona o novo usuário
+        novo_usuario = {
+            'nome': usuario,
+            'senha': senha_codificada,
+            'nomeCompleto': nome_completo
+        }
+        usuarios.append(novo_usuario)
+
+        # Salva os usuários no arquivo JSON
+        with open('usuarios.json', 'w') as usuarios_file:
+            json.dump(usuarios, usuarios_file, indent=4)
+
+        flash('Cadastro realizado com sucesso!')
+        return redirect("/")
+    else:
+        return render_template("html/cadastro.html")
 def convert_docx_to_pdf(docx_path, pdf_path):
     try:
-        subprocess.run(['/usr/bin/libreoffice', '--headless', '--convert-to', 'pdf', '--outdir', pdf_path, docx_path],
+        subprocess.run(['/usr/bin/libreoffice', '--headless', '--convert-to', 'pdf', '--outdir', os.path.dirname(pdf_path), docx_path],
          check=True)
         return True
     except subprocess.CalledProcessError:
         return False
 
+
 def txt_to_pdf(txt_path, pdf_path):
-    with open(txt_path, 'r') as txt_file, open(pdf_path, 'wb') as pdf_file:
-        pdf_writer = PdfWriter()
-        pdf_writer.add_page()
-        pdf_writer.add_font('Arial', '', 'static/fonts/arial.ttf')
-        pdf_writer.set_font('Arial', '', 12)
-        for line in txt_file:
-            pdf_writer.write_line(line.strip())
-        pdf_writer.save(pdf_file)
+    c = canvas.Canvas(pdf_path, pagesize=letter)
+    c.setFont('Helvetica', 12)
+
+    with open(txt_path, 'r') as txt_file:
+        lines = txt_file.readlines()
+        for line in lines:
+            c.drawString(50, 700, line.strip())
+            c.showPage()
+
+    c.save()
 
 
 def xlsx_to_pdf(xlsx_path, pdf_path):
