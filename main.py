@@ -1,16 +1,11 @@
 import os
 from flask import Flask, render_template, request, flash, redirect, send_file
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import  check_password_hash
 from werkzeug.utils import secure_filename
 from PyPDF2 import PdfWriter
-from docx import Document
 import pyexcel as pe
 import json
-from reportlab.lib.pagesizes import letter
-from reportlab.pdfgen import canvas
-from docx import Document
 import subprocess
-from flask import send_file
 
 
 
