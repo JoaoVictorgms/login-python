@@ -104,13 +104,6 @@ def convert_to_pdf(filename):
     else:
         return None
 
-def convert_docx_to_pdf(docx_path, pdf_path):
-    try:
-        subprocess.run(['/usr/bin/libreoffice', '--headless', '--convert-to', 'pdf', '--outdir', pdf_path, docx_path],
-         check=True)
-        return True
-    except subprocess.CalledProcessError:
-        return False
 
 @app.route("/audio")
 def audio():
@@ -121,6 +114,14 @@ def imagem():
     return render_template("html/imagem.html")
 
 
+def convert_docx_to_pdf(docx_path, pdf_path):
+    try:
+        subprocess.run(['/usr/bin/libreoffice', '--headless', '--convert-to', 'pdf', '--outdir', pdf_path, docx_path],
+         check=True)
+        return True
+    except subprocess.CalledProcessError:
+        return False
+
 def txt_to_pdf(txt_path, pdf_path):
     with open(txt_path, 'r') as txt_file, open(pdf_path, 'wb') as pdf_file:
         pdf_writer = PdfWriter()
@@ -130,27 +131,6 @@ def txt_to_pdf(txt_path, pdf_path):
         for line in txt_file:
             pdf_writer.write_line(line.strip())
         pdf_writer.save(pdf_file)
-
-def convert_docx_to_pdf(docx_path, pdf_path):
-    try:
-        subprocess.run(['/usr/bin/libreoffice', '--headless', '--convert-to', 'pdf', '--outdir', pdf_path, docx_path],
-         check=True)
-        return True
-    except subprocess.CalledProcessError:
-        return False
-
-def docx_to_pdf(docx_path, pdf_path):
-    doc = Document(docx_path)
-    paragraphs = [p.text for p in doc.paragraphs]
-    content = "\n".join(paragraphs)
-
-    c = canvas.Canvas(pdf_path)
-    c.setFont('Arial', 12)
-    text = c.beginText(50, 750)
-    text.setFont('Arial', 12)
-    text.textLines(content)
-    c.drawText(text)
-    c.save()
 
 
 def xlsx_to_pdf(xlsx_path, pdf_path):
