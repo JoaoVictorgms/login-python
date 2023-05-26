@@ -1,15 +1,10 @@
-import os
+import os, json, subprocess, pyexcel as pe
 from flask import Flask, render_template, request, flash, redirect, send_file
 from werkzeug.security import  check_password_hash
 from werkzeug.utils import secure_filename
-import pyexcel as pe
-import json
-import subprocess
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from werkzeug.security import generate_password_hash
-
-# Resto do seu código...
 
 
 UPLOAD_FOLDER = 'arquivos'
@@ -51,7 +46,7 @@ def arquivo():
             flash('Nenhum arquivo selecionado.')
             return redirect("/arquivo")
 
-        arquivo = request.files['file']
+            arquivo = request.files['file']
 
         if arquivo.filename == '':
             flash('Nenhum arquivo selecionado.')

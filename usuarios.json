@@ -1,10 +1,5 @@
 [
     {
-        "nome": "Luiz",
-        "senha": "pbkdf2:sha256:260000$sfr3P732RnMHmxTE$67b610a3f58638442926d211848d2fba0bd8e492d9976ab5e2cd6bf53f6f5a9c",
-        "nomeCompleto": "Luiz Paulo"
-    },
-    {
         "nome": "Joao ",
         "senha": "pbkdf2:sha256:260000$LBooYD9HEmQwVChR$6861cf19851158124c7a2312c51208d299e08c5e56dc0b5e4be6cb8cf52d2f37",
         "nomeCompleto": "Joao Victor Gomes de Oliveira Alves"
